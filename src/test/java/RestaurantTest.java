@@ -20,7 +20,7 @@ class RestaurantTest {
         Restaurant restaurant = new Restaurant("Test Restaurant", "Test Location", currentTime.minusHours(2),  currentTime.plusHours(2));
         assertTrue(restaurant.isRestaurantOpen());
     }
-
+    //>>>>>>>>>>>>>>>>>>>>>>>>Failed Case Scenario<<<<<<<<<<<<<<<<<<<<<<<
     @Test
     public void is_restaurant_open_should_return_false_if_time_is_outside_opening_and_closing_time() {
         Restaurant restaurant = new Restaurant("Test Restaurant", "Test Location", currentTime.minusHours(3),currentTime.minusMinutes(5) );
