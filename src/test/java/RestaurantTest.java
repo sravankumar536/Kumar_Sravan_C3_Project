@@ -2,6 +2,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,7 +22,7 @@ class RestaurantTest {
         Restaurant restaurant = new Restaurant("Test Restaurant", "Test Location", currentTime.minusHours(2),  currentTime.plusHours(2));
         assertTrue(restaurant.isRestaurantOpen());
     }
-    //>>>>>>>>>>>>>>>>>>>>>>>>Failed Case Scenario<<<<<<<<<<<<<<<<<<<<<<<
+
     @Test
     public void is_restaurant_open_should_return_false_if_time_is_outside_opening_and_closing_time() {
         Restaurant restaurant = new Restaurant("Test Restaurant", "Test Location", currentTime.minusHours(3),currentTime.minusMinutes(5) );
@@ -68,4 +70,30 @@ class RestaurantTest {
     }
     //<<<<<<<<<<<<<<<<<<<<<<<MENU>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+    //<<<<<<<<<<<<<<<<Test Calculate Order value>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+    @Test
+    public void getOrderValue_should_return_total_order_value_for_valid_items() throws itemNotFoundException {
+        LocalTime openingTime = LocalTime.parse("10:30:00");
+        LocalTime closingTime = LocalTime.parse("22:00:00");
+        Restaurant restaurant = new Restaurant("Amelie's cafe", "Chennai", openingTime, closingTime);
+        restaurant.addToMenu("Sweet corn soup", 100);
+        restaurant.addToMenu("Vegetable lasagne", 200);
+
+        List<String> itemNames = Arrays.asList("Sweet corn soup", "Vegetable lasagne");
+        int expectedOrderValue = 300; // 100 + 200
+        assertEquals(expectedOrderValue, restaurant.getOrderValue(itemNames));
+    }
+
+    @Test
+    public void getOrderValue_should_throw_exception_for_invalid_item() {
+        LocalTime openingTime = LocalTime.parse("10:30:00");
+        LocalTime closingTime = LocalTime.parse("22:00:00");
+        Restaurant restaurant = new Restaurant("Amelie's cafe", "Chennai", openingTime, closingTime);
+        restaurant.addToMenu("Sweet corn soup", 100);
+        restaurant.addToMenu("Vegetable lasagne", 200);
+
+        List<String> itemNames = Arrays.asList("Sweet corn soup", "French fries"); // "French fries" is not in the menu
+        assertThrows(itemNotFoundException.class, () -> restaurant.getOrderValue(itemNames));
+    }
 }
